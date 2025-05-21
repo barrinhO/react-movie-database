@@ -1,9 +1,13 @@
+import { useState } from "react";
+import Button from "./components/Button";
+
 import "./index.css";
 function App() {
+  const [count, setCount] = useState(0);
   return (
     <>
       <div>
-        <h1 className="bg-black text-white">Movie Database</h1>
+        <Button />
       </div>
     </>
   );
