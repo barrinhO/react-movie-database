@@ -1,13 +1,13 @@
-import React from "react";
+import { Routes, Route } from "react-router-dom";
 import APIOMDB from "./components/ApiOMDB.jsx";
+import MovieDetails from "./pages/movieDetails.jsx";
 
 function App() {
   return (
-    <>
-      <div>
-        <APIOMDB />
-      </div>
-    </>
+    <Routes>
+      <Route path="/" element={<APIOMDB />} />
+      <Route path="/detalhes" element={<MovieDetails />} />
+    </Routes>
   );
 }
 

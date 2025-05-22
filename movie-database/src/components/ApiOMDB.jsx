@@ -1,57 +1,68 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
 function APIOMDB() {
   const [movies, setMovies] = useState([]);
-  const [carregando, setCarregando] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const buscarFilmes = async () => {
+    async function fetchMovies() {
       try {
-        const res = await axios.get(`${BASE_URL}/movie/popular`, {
+        const page = Math.floor(Math.random() * 10) + 1;
+        const response = await axios.get(`${BASE_URL}/movie/popular`, {
           params: {
             api_key: API_KEY,
             language: "pt-BR",
-            page: 1,
+            page,
           },
         });
-        setMovies(res.data.results);
-      } catch (err) {
-        console.error("Erro ao buscar filmes:", err);
+        setMovies(response.data.results);
+      } catch (error) {
+        console.error("Erro ao carregar filmes:", error);
       } finally {
-        setCarregando(false);
+        setLoading(false);
       }
-    };
+    }
 
-    buscarFilmes();
+    fetchMovies();
   }, []);
 
-  if (carregando) return <p>Carregando...</p>;
+  if (loading) return <p className="text-white text-center">Carregando...</p>;
 
   return (
-    <div className="flex flex-col items-center bg-neutral-700 min-h-screen p-4">
-      <h1 className="text-3xl font-bold text-white font-[Poppins]">
-        MOVIES DATABASE
-      </h1>
-      <h2 className="text-xl text-white mb-6">Filmes 🎥🎞️</h2>
+    <div className="bg-neutral-800 min-h-screen p-4 text-white text-center">
+      <h1 className="text-5xl font-bold font-[Poppins]">MOVIES DATABASE</h1>
+      <h2 className="text-3xl mt-2 mb-10 italic font-bold">Filmes 🎥🎞️</h2>
 
-      <ul className="flex flex-wrap justify-center gap-6 transition-all duration-0.3 ease-in-out">
-        {movies.slice(0, 18).map((filme) => (
+      <ul className="flex flex-wrap justify-center gap-6">
+        {movies.slice(0, 18).map((movie) => (
           <li
-            key={filme.id}
-            className="p-3 rounded-lg flex flex-col items-center w-52 shadow-emerald-500 shadow-lg bg-neutral-600 transform hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer hover:shadow-lg hover:shadow-emerald-300"
+            key={movie.id}
+            className="w-52 bg-neutral-700 p-3 rounded-lg shadow-lg hover:scale-105 transition shadow-black"
           >
-            <img
-              src={`https://image.tmdb.org/t/p/w200${filme.poster_path}`}
-              alt={filme.title}
-              className="w-48 h-72 object-cover rounded-md"
-            />
-            <strong className="mt-2 text-center text-white font-semibold text-base line-clamp-2">
-              {filme.title}
-            </strong>
+            <Link
+              to={`/detalhes?id=${movie.id}`}
+              className="flex flex-col items-center"
+            >
+              <img
+                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                alt={movie.title}
+                className="w-48 h-72 object-cover rounded-md"
+              />
+              <strong className="mt-2 font-semibold line-clamp-2 text-1xl">
+                {movie.title}
+              </strong>
+              <p className=" mt-1 text-1xl">
+                Ano: {movie.release_date?.slice(0, 4)}📅
+              </p>
+              <p className="text-1-xl">
+                Avaliação: {movie.vote_average?.toFixed(1)}⭐
+              </p>
+            </Link>
           </li>
         ))}
       </ul>
