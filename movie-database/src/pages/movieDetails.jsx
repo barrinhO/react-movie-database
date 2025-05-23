@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import MovieInfo from "./MovieInfo";
+import Button from "./Button";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -45,25 +47,9 @@ function MovieDetails() {
         Detalhes do Filme 🎥
       </h2>
 
-      <img
-        src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-        alt={movie.title}
-        className="w-60 rounded-md mb-4 shadow-lg"
-      />
+      <MovieInfo movie={movie} />
 
-      <h3 className="text-2xl font-semibold">{movie.title}</h3>
-      <p className="mt-2 mb-2  line-clamp-3 text-gray w-100 h-50 font-semibold p-2 rounded-md">
-        {movie.overview || "Sem descrição disponível."}
-      </p>
-      <p className="text-lg mt-2">📅 Ano: {movie.release_date.slice(0, 4)}</p>
-      <p className="text-lg">⭐ Nota média: {movie.vote_average.toFixed(1)}</p>
-
-      <button
-        onClick={() => navigate(-1)}
-        className="bg-blue-500 hover:bg-blue-600 mt-10 px-4 py-2 rounded-md transition"
-      >
-        Voltar
-      </button>
+      <Button onClick={() => navigate(-1)}>Voltar</Button>
     </div>
   );
 }
