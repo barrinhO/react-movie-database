@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import MovieInfo from "./MovieInfo";
-import Button from "./Button";
+import MovieInfo from "../components/MovieInfo";
+import Button from "../components/Button";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
