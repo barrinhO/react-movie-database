@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import APIOMDB from "./components/ApiOMDB.jsx";
+import APIOMDB from "./components/ApiTMDB.jsx";
 import MovieDetails from "./pages/movieDetails.jsx";
 
 function App() {
