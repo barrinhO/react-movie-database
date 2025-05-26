@@ -1,3 +1,5 @@
+// Componente para exibir um card de filme como, título, imagem, ano e avaliação média
+
 import { Link } from "react-router-dom";
 
 function MovieCard({ movie }) {

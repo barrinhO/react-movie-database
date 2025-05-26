@@ -1,3 +1,5 @@
+// Componente para exibir detalhes de um filme
+
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -7,6 +9,7 @@ import Button from "../components/Button";
 const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
+// Função para exibir detalhes de um filme
 function MovieDetails() {
   const [searchParams] = useSearchParams();
   const movieId = searchParams.get("id");
@@ -15,6 +18,7 @@ function MovieDetails() {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Efeito para buscar detalhes do filme quando o componente é criado
   useEffect(() => {
     async function fetchDetails() {
       try {
@@ -31,7 +35,7 @@ function MovieDetails() {
         setLoading(false);
       }
     }
-
+    // Inicia a busca de detalhes do filme
     fetchDetails();
   }, [movieId]);
 

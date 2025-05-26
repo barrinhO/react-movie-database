@@ -1,3 +1,5 @@
+// Componente principal que busca filmes da API do TMDB
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -26,16 +28,18 @@ function APITMDB() {
           page,
         },
       });
+
       const filmes = response.data.results;
       setMovies(filmes);
-      sessionStorage.setItem("filmesSalvos", JSON.stringify(filmes)); // salva
+      sessionStorage.setItem("filmesSalvos", JSON.stringify(filmes)); // salva no sessionStorage
     } catch (error) {
       console.error("Erro ao carregar filmes:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  // sessionStorage é usado para armazenar os filmes salvos
+  // Isso permite que os filmes sejam persistidos entre as sessões do usuário
   useEffect(() => {
     const filmesSalvos = sessionStorage.getItem("filmesSalvos");
 

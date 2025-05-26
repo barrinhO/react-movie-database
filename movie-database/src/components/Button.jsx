@@ -1,3 +1,5 @@
+// Componente botão reutilizável, usado para refresh e voltar da página de detalhes do filme
+
 function Button({ children, onClick }) {
   return (
     <button

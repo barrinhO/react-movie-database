@@ -1,3 +1,5 @@
+// Componente para exibir informações de um filme
+
 function MovieInfo({ movie }) {
   return (
     <>
