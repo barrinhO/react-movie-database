@@ -12,41 +12,88 @@ function APITMDB() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Função para buscar filmes
-  // Essa função é chamada quando o botão "REFRESH" é clicado
+  // Função que busca os filmes populares da API do TMDB
+
   const fetchMovies = async () => {
     setLoading(true);
     try {
-      // page gera um número aleatório entre 1 e 10 para a página
-      // Isso garante que a cada clique no botão, uma nova página de filmes seja carregada
-      // e é útil para evitar que o mesmo conjunto de filmes seja carregado repetidamente
-      const page = Math.floor(Math.random() * 10) + 1;
-      const response = await axios.get(`${BASE_URL}/movie/popular`, {
+      // Remover filmes antigos salvos para forçar novo carregamento
+      sessionStorage.removeItem("filmesSalvos");
+
+      const page = Math.floor(Math.random() * 80) + 1;
+
+      const response = await axios.get(`${BASE_URL}/discover/movie`, {
         params: {
           api_key: API_KEY,
           language: "pt-BR",
+          sort_by: "popularity.desc",
+          include_adult: false,
+          certification_country: "BR",
+          certification_lte: "12",
           page,
         },
       });
 
-      const filmes = response.data.results;
-      setMovies(filmes);
-      sessionStorage.setItem("filmesSalvos", JSON.stringify(filmes)); // salva no sessionStorage
+      const palavrasBanidas = [
+        "sexo",
+        "erótico",
+        "adulto",
+        "sensual",
+        "nude",
+        "sedução",
+        "acompanhante",
+        "prostituta",
+        "69",
+        "strip",
+        "porn",
+        "cláudia",
+        "prazer",
+        "orgasmo",
+      ];
+
+      const generosBanidos = [10749, 18]; // Romance e Drama
+
+      const filmesFiltrados = response.data.results.filter((movie) => {
+        const titulo = movie.title?.toLowerCase() || "";
+        const tituloOriginal = movie.original_title?.toLowerCase() || "";
+        const descricao = movie.overview?.toLowerCase() || "";
+
+        const contemPalavraBanida = palavrasBanidas.some(
+          (palavra) =>
+            titulo.includes(palavra) ||
+            tituloOriginal.includes(palavra) ||
+            descricao.includes(palavra)
+        );
+
+        const contemGeneroBanido = movie.genre_ids?.some((id) =>
+          generosBanidos.includes(id)
+        );
+
+        return (
+          movie.adult === false &&
+          movie.poster_path &&
+          !contemPalavraBanida &&
+          !contemGeneroBanido
+        );
+      });
+
+      setMovies(filmesFiltrados);
+      sessionStorage.setItem("filmesSalvos", JSON.stringify(filmesFiltrados));
     } catch (error) {
       console.error("Erro ao carregar filmes:", error);
     } finally {
       setLoading(false);
     }
   };
-  // sessionStorage é usado para armazenar os filmes salvos
-  // Isso permite que os filmes sejam persistidos entre as sessões do usuário
+
+  // Quando o componente monta, tenta carregar os filmes salvos no sessionStorage
   useEffect(() => {
     const filmesSalvos = sessionStorage.getItem("filmesSalvos");
 
     if (filmesSalvos) {
       setMovies(JSON.parse(filmesSalvos));
     } else {
-      fetchMovies(); // só busca se não tem no sessionStorage
+      fetchMovies(); // Só busca da API se não houver nada salvo
     }
   }, []);
 
