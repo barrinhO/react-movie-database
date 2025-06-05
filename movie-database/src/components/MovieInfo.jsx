@@ -11,7 +11,7 @@ function MovieInfo({ movie }) {
 
       <h3 className="text-2xl font-semibold">{movie.title}</h3>
 
-      <p className="mt-2 mb-2 line-clamp-3 text-gray w-100 h-50 font-semibold p-2 rounded-md">
+      <p className="mt-2 mb-4 max-w-xl text-gray-200 font-medium text-justify p-4 rounded-md bg-neutral-700">
         {movie.overview || "Sem descrição disponível."}
       </p>
 
